@@ -1,0 +1,10 @@
+All forms of positioning should be controlled by Canvas
+- Allow canvas to position cons nodes
+
+Allow for creation of arbitrary structs which can interface with Canvas
+
+Implementing tags of picts to facilitate replacing/deleting sub-picts
+
+More optional (keyword) arguments for things like arrow angle, min width of vector box
+
+
