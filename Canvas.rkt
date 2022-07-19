@@ -8,8 +8,9 @@
 (require "Basic_definitions.rkt")
 (require "Vectors.rkt")
 (require "Cons.rkt")
+(require "Struct.rkt")
 
-
+(provide (all-defined-out))
 
 
 (struct canvas
@@ -20,18 +21,29 @@
      (make-constructor-style-printer
       (λ (obj) 'canvas-struct)
       (λ (obj) (list (canvas-reprs obj)
+                     'final
                      (canvas-final obj)))))])
 
 (define (blank-canvas width height)
   (define base (rectangle width height))
-  (canvas '(base) base))
+  (canvas (list) base))
 
-(define (insert-vec canvas vect x y)
-  (set-canvas-reprs! canvas (list (append (canvas-reprs canvas) vect)))
-  (set-canvas-final! canvas (pin-over (canvas-final canvas) x y (redraw-vec vect))))
+(define (insert-vec canvas vect x y show-indices?)
+  (set-canvas-reprs! canvas (append (canvas-reprs canvas) (list vect)))
+  (redraw-vec vect)
+  (if show-indices?
+      (set-canvas-final! canvas
+                         (ppict-do (canvas-final canvas)
+                                   #:go  (coord x y 'lt)
+                                   (vect-final vect)))
+      (set-canvas-final! canvas
+                         (ppict-do (canvas-final canvas)
+                                   #:go  (coord x y 'lt)
+                                   (vect-final-no-indices vect)))
+      ))
 
 
-(define (point-vec canvas from from-index to [to-func lt-find])
+(define (point-vec-to-vec canvas from from-index to [to-func lt-find])
   (define real-from (vector-ref (vect-pic-contents from) from-index))
   ;(set! real-from (ptr-base))
   ;(redraw-vec from)
@@ -51,17 +63,127 @@
     )
 
   (set-canvas-final! canvas
-                     (panorama
                      (pin-arrow-line 10 (canvas-final canvas)
                                      real-from fromfunc
-                                     (vect-final to) to-func
+                                     (vect-final-no-indices to) to-func
                                      #:line-width 2
                                      #:start-angle sa
                                      ;#:end-angle 345
                                      #:color "Medium Violet Red")
-                     )))
+                     ))
+
+(define (point-vec-to-struct canvas from from-index to [to-func lt-find])
+  (define real-from (vector-ref (vect-pic-contents from) from-index))
+  ;(set! real-from (ptr-base))
+  ;(redraw-vec from)
+
+  (define fromx 0)
+  (define fromy 0)
+  fromx fromy (cc-find (canvas-final canvas) real-from)
+  (define tox 0)
+  (define toy 0)
+  tox toy (lt-find (canvas-final canvas) (struct-struct-box to))
+
+  (define sa 180)
+  (define fromfunc cb-find)
+  (cond
+    [(< fromy toy) (set! fromfunc ct-find)
+                   (set! sa 0)]
+    )
+
+  (set-canvas-final! canvas
+                     (pin-arrow-line 10 (canvas-final canvas)
+                                     real-from fromfunc
+                                     (struct-struct-box to) to-func
+                                     #:line-width 2
+                                     #:start-angle sa
+                                     ;#:end-angle 345
+                                     #:color "Medium Violet Red")
+                     ))
+
+(define (insert-list canvas lst lst-x-coord lst-y-coord link?)
+  (cond
+    [(not (= (length lst-x-coord) (length lst-y-coord)))
+     (error "need equal number of x and y coordinates")]
+    [(not (= (length lst-x-coord) (length (cons-list-nodes lst))))
+      (error "need equal number of nodes and coordinates")]
+    )
+  (set-canvas-reprs! canvas (append (canvas-reprs canvas) (list lst)))
+  (draw-list lst)
+  (for ([i (in-range (length lst-x-coord))])
+    (define node (list-ref (cons-list-nodes lst) i))
+    (define node-pic (cons-node-final node))
+    (set-canvas-final! canvas
+                       (ppict-do (canvas-final canvas)
+                                 #:go  (coord (list-ref lst-x-coord i)
+                                              (list-ref lst-y-coord i)
+                                              'lt)
+                                 node-pic))
+    )
+  (if link?
+      (for ([i (in-range (- (length (cons-list-nodes lst)) 1))])
+        (define from (list-ref (cons-list-nodes lst) i))
+        (define to (list-ref (cons-list-nodes lst) (+ i 1)))
+        (set-canvas-final! canvas
+                           (pin-arrow-line 10 (canvas-final canvas)
+                                           (cons-node-next-pic from) rc-find
+                                           (cons-node-box to) lc-find
+                                           ;TODO - user customisable locations
+                                           #:line-width 2
+                                           #:color "Medium Violet Red"
+                                           ))
+        )
+      (void))
+  )
+
+(define (insert-struct canvas strct x y)
+  (set-canvas-reprs! canvas (append (canvas-reprs canvas) (list strct)))
+  (draw-struct strct)
+  (set-canvas-final! canvas
+                     (ppict-do (canvas-final canvas)
+                               #:go  (coord x y 'lt)
+                               (struct-struct-final strct)))
+  )
+
+; Currently only handles struct -> vector pointing
+; Will expand functionality to be able to point to anything
+(define (point-struct-to-vec canvas from from-field to [to-func lt-find])
+  (define real-from (void))
+  (for ([i (in-range (length (struct-struct-lst-field-names from)))])
+    (if (equal? (list-ref (struct-struct-lst-field-names from) i) from-field)
+        (set! real-from (list-ref (struct-struct-lst-pics from) i))
+        (void))
+    )
+  
+  (define fromx 0)
+  (define fromy 0)
+  fromx fromy (cc-find (canvas-final canvas) real-from)
+  (define tox 0)
+  (define toy 0)
+  tox toy (lt-find (canvas-final canvas) (vect-final-no-indices to))
+
+  (define sa 180)
+  (define fromfunc rc-find)
+
+  (set-canvas-final! canvas
+                     (pin-arrow-line 10 (canvas-final canvas)
+                                     real-from fromfunc
+                                     (vect-final-no-indices to) to-func
+                                     #:line-width 2
+                                     #:start-angle sa
+                                     ;#:end-angle 345
+                                     #:color "Medium Violet Red")
+                     ))
+
 
 #|
+(println "begins here")
+(define test-canvas (blank-canvas 350 250))
+(insert-list test-canvas a (list 0.1 0.3 0.5) (list 0.1 0.3 0.1) true)
+;test-canvas
+
+
+
 (define a (make-vec 10 0))
 (define vecnull (make-vec 10))
 (set-vec-cell a 2 (ptr))
@@ -70,8 +192,8 @@
 
 
 (define test-canvas (blank-canvas 350 250))
-(insert-vec test-canvas vecnull 0 50)
-(insert-vec test-canvas a 0 0)
+(insert-vec test-canvas vecnull 0.02 0.5 true)
+(insert-vec test-canvas a 0.02 0.02 true)
 
 test-canvas
 (point-vec test-canvas a 2 vecnull)

@@ -43,7 +43,8 @@
   [(define write-proc
      (make-constructor-style-printer
       (λ (obj) 'cons-node-struct)
-      (λ (obj) (list (cons-node-data obj)
+      (λ (obj) (list 'data
+                     (cons-node-data obj)
                      'data-pic
                      (cons-node-data-pic obj)
                      'next-pic
@@ -54,22 +55,34 @@
                      (cons-node-final obj)))))])
 
 
-(struct cons-list (nodes pic)
+(struct cons-list (nodes)
   #:mutable
   #:methods gen:custom-write
   [(define write-proc
      (make-constructor-style-printer
       (λ (obj) 'cons-list-struct)
-      (λ (obj) (list (cons-list-nodes obj)
-                     'final-list-pic
-                     (cons-list-pic obj)))))])
+      (λ (obj) (list (cons-list-nodes obj)))))])
 
 
 (define (make-list [len 1])
   (define first-node (cons-node null (blank 0) (null-ptr-pic) (cons-box) (blank 0)))
   (draw-node first-node)
   ;(println first-node)
-  (define result (cons-list (list first-node) (blank 0)))
+  (define result (cons-list (list first-node)))
+  (draw-list result)
+  result
+  )
+
+(define (make-list-from-list lst)
+  (define result (cons-list (list)))
+  (for-each (λ (data)
+              (define node
+                (cons-node data (blank 0) (null-ptr-pic) (cons-box) (blank 0)))
+              (set-cons-node-next-pic! node (ptr-base))
+              (draw-node node)
+              (set-cons-list-nodes! result (append (cons-list-nodes result) (list node)))
+              )
+            lst)
   (draw-list result)
   result
   )
@@ -127,8 +140,6 @@
                           #:color "Medium Violet Red"
                           ))
     )
-  
-  (set-cons-list-pic! conslist base)
   base)
 
 (define (add-single-node-end new-data conslist)
@@ -138,14 +149,12 @@
   (draw-list conslist)
   )
 
-
 #|
-(define a (make-list))
-a
+(define a (make-list-from-list (list 1 2 3 4)))
+(draw-list a)
 (println "asdf")
 (add-single-node-end 1 a)
 a
 (add-single-node-end "abc" a)
 a
-
 |#
