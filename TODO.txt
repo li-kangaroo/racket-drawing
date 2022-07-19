@@ -1,10 +1,20 @@
-All forms of positioning should be controlled by Canvas
-- Allow canvas to position cons nodes
+TODO:
 
-Allow for creation of arbitrary structs which can interface with Canvas
+Customizability: More optional (keyword) arguments for things like arrow angle, min width of vector box, which part of an item a pointer points to
 
-Implementing tags of picts to facilitate replacing/deleting sub-picts
+Combine similar functions into a single function. For example, getting a vector cell to point to a struct and getting a vector cell
+ to point to another vector should be combined (probably simple switch case that calls the right one based on the circumstances)
 
-More optional (keyword) arguments for things like arrow angle, min width of vector box
+Documentation of code/functions
 
+Example code for creating diagrams from slides 1 and 2
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+COMPLETED:
+(DONE) All forms of positioning should be controlled by Canvas, allow canvas to position cons nodes
+
+(RESOLVED) Implementing tags of picts to facilitate replacing/deleting sub-picts
+- Deemed unnecessary, can use conditionals instead
+
+(DONE) Allow for creation of arbitrary structs which can interface with Canvas
