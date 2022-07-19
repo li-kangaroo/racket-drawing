@@ -7,7 +7,7 @@ Combine similar functions into a single function. For example, getting a vector 
 
 Documentation of code/functions
 
-Example code for creating diagrams from slides 1 and 2
+Example code for creating diagrams from slides 02
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -18,3 +18,5 @@ COMPLETED:
 - Deemed unnecessary, can use conditionals instead
 
 (DONE) Allow for creation of arbitrary structs which can interface with Canvas
+
+Example code for creating diagrams from slides 01.
