@@ -109,9 +109,9 @@
   (set-struct-struct-final! strct final-pic)
   (struct-struct-final strct))
 
-(define test-struct (create-struct
-                     (list "number"
-                           "name"
-                           "position")
-                     (list 928 (ptr) 4)))
-test-struct
+;(define test-struct (create-struct
+;                     (list "number"
+;                           "name"
+;                           "position")
+;                     (list 928 (ptr) 4)))
+;test-struct

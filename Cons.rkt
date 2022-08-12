@@ -64,8 +64,8 @@
       (λ (obj) (list (cons-list-nodes obj)))))])
 
 
-(define (make-list [len 1])
-  (define first-node (cons-node null (blank 0) (null-ptr-pic) (cons-box) (blank 0)))
+(define (make-list [len 1] #:last-node-next-pic [next-pic (null-ptr-pic)])
+  (define first-node (cons-node null (blank 0) next-pic (cons-box) (blank 0)))
   (draw-node first-node)
   ;(println first-node)
   (define result (cons-list (list first-node)))
@@ -73,17 +73,17 @@
   result
   )
 
-(define (make-list-from-list lst)
+(define (make-list-from-list lst #:last-node-next-pic [last-next-pic (null-ptr-pic)])
   (define result (cons-list (list)))
   (for-each (λ (data)
               (define node
-                (cons-node data (blank 0) (null-ptr-pic) (cons-box) (blank 0)))
-              (set-cons-node-next-pic! node (ptr-base))
+                (cons-node data (blank 0) (ptr-base) (cons-box) (blank 0)))
               (draw-node node)
               (set-cons-list-nodes! result (append (cons-list-nodes result) (list node)))
               )
             lst)
-  (draw-list result)
+  
+  (draw-list result #:last-node-next-pic last-next-pic)
   result
   )
 
@@ -109,12 +109,7 @@
                                              (cons-node-next-pic node)))))
 
 
-(define (iterate lst foo)
-  (unless (empty? lst)
-    (foo (first lst))
-    (iterate (rest lst) foo)))
-
-(define (draw-list conslist)
+(define (draw-list conslist #:last-node-next-pic [last-next-pic (null-ptr-pic)])
   (define lst (cons-list-nodes conslist))
   (define base (blank 0))
   (for-each (λ (node)
@@ -122,7 +117,7 @@
               (draw-node node)
               )
             lst)
-  (set-cons-node-next-pic! (last lst) (null-ptr-pic))
+  (set-cons-node-next-pic! (last lst) last-next-pic)
   (draw-node (last lst))
   (for-each (λ (node)
               (set! base (hc-append 20 base (cons-node-final node)))

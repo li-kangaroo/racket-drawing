@@ -109,7 +109,6 @@
       (error "need equal number of nodes and coordinates")]
     )
   (set-canvas-reprs! canvas (append (canvas-reprs canvas) (list lst)))
-  (draw-list lst)
   (for ([i (in-range (length lst-x-coord))])
     (define node (list-ref (cons-list-nodes lst) i))
     (define node-pic (cons-node-final node))
@@ -173,6 +172,31 @@
                                      #:start-angle sa
                                      ;#:end-angle 345
                                      #:color "Medium Violet Red")
+                     ))
+
+
+
+(define (link-node-to-node canvas from from-index to to-index
+                           #:from-find [from-find rc-find]
+                           #:to-find [to-find lc-find]
+                           #:color [clr "Medium Violet Red"]
+                           #:start-angle [sa #f]
+                           #:end-angle [ea #f]
+                           #:start-pull [sp 1/4]
+                           #:end-pull [ep 1/4])
+  (define from-node (list-ref (cons-list-nodes from) from-index))
+  (define real-from (cons-node-next-pic from-node))
+  (define real-to (cons-node-box (list-ref (cons-list-nodes to) to-index)))
+  (set-canvas-final! canvas
+                     (pin-arrow-line 10 (canvas-final canvas)
+                                     real-from from-find
+                                     real-to to-find
+                                     #:line-width 2
+                                     #:start-angle sa
+                                     #:end-angle ea
+                                     #:start-pull sp
+                                     #:end-pull ep
+                                     #:color clr)
                      ))
 
 
