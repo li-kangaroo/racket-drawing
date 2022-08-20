@@ -26,7 +26,8 @@
                      'final
                      (struct-struct-final obj)))))])
 
-(define (create-struct lst-fields lst-contents)
+(define (create-struct lst-fields lst-contents
+                       #:fixed-width [fixed-width null])
   (cond
     [(not (= (length lst-fields) (length lst-contents)))
      (error "need equal number of fields and contents")]
@@ -48,10 +49,11 @@
                    (list)
                    box-pic
                    (blank 0)))
-  (draw-struct result)
+  (draw-struct result #:fixed-width fixed-width)
   result)
 
-(define (draw-struct strct)
+(define (draw-struct strct
+                     #:fixed-width [fixed-width null])
   (define num-fields (length (struct-struct-lst-contents strct)))
   (set-struct-struct-lst-pics! strct
    (build-list num-fields
@@ -83,14 +85,18 @@
                              (pict-width (list-ref (struct-struct-lst-pics strct)
                                             i))))
     )
-  (define filled-box (rectangle (+ 10 max-width-content)
+  (define box-width 0)
+  (if (null? fixed-width)
+      (set! box-width max-width-content)
+      (set! box-width fixed-width))
+  (define filled-box (rectangle (+ 10 box-width)
                              (* 25 num-fields)
                              #:border-color "Blue"
                              #:border-width 2))
   (for ([i (in-range (- num-fields 1))])
     (set! filled-box (ppict-do filled-box
                             #:go (coord 0.5 (/ (+ 1 i) num-fields) 'cc)
-                            (hline (+ 10 max-width-content) 20)))
+                            (hline (+ 10 box-width) 20)))
     )
   (define labels (blank (+ max-width 5) (pict-height (struct-struct-box strct))))
   

@@ -54,7 +54,7 @@
 ;see TODO regarding customizability - ability to position picts with alignment
 ;other than the top left corner
 (canvas-final slide-33-canvas)
-;slide-33-canvas
+
 
 ;Slide 35, 36 - arrows
 (println "slide 35 demo")
@@ -95,7 +95,8 @@
 (point-struct-to-vec slide-35-canvas 35c-struct "name" carol)
 (point-struct-to-vec slide-35-canvas 35d-struct "name" dave)
 
-slide-35-canvas
+(canvas-final slide-35-canvas)
+
 ;Slide 38 - box identity and aliasing
 (println "slide 38 demo")
 (define slide-38-canvas (blank-canvas 300 200))
@@ -123,4 +124,4 @@ slide-35-canvas
 (point-vec-to-struct slide-38-canvas slide-38-vector 3 38-3-struct ct-find)
 (point-vec-to-struct slide-38-canvas slide-38-vector 4 38-4-struct ct-find)
 
-slide-38-canvas
+(canvas-final slide-38-canvas)
