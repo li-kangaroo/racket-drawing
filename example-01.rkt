@@ -16,7 +16,7 @@
 (println "slide 11 demo")
 (define slide-11-canvas (blank-canvas 100 100))
 (define slide-11-vector (make-vec-from-vec (vector 14 2 65 23)))
-(insert-vec slide-11-canvas slide-11-vector 0.1 0.1 true)
+(insert-vec slide-11-canvas slide-11-vector 0.1 0.1)
 (canvas-final slide-11-canvas)
 
 
@@ -61,7 +61,7 @@
 (define slide-35-canvas (blank-canvas 450 300))
 
 (define slide-35-spine-vector (make-vec-from-vec (make-vector 4 (ptr))))
-(insert-vec slide-35-canvas slide-35-spine-vector 0.35 0.1 true)
+(insert-vec slide-35-canvas slide-35-spine-vector 0.35 0.1)
 
 (define (make-35-struct val1 val2 val3)
          (create-struct
@@ -85,15 +85,56 @@
 (define carol (make-vec-from-vec (vector "C" "a" "r" "o" "l")))
 (define dave (make-vec-from-vec (vector "D" "a" "v" "e")))
 
-(insert-vec slide-35-canvas alice 0.05 0.7 false)
-(insert-vec slide-35-canvas bob 0.3 0.85 false)
-(insert-vec slide-35-canvas carol 0.5 0.7 false)
-(insert-vec slide-35-canvas dave 0.75 0.85 false)
+(insert-vec slide-35-canvas alice 0.05 0.7
+            #:show-indices? false)
+(insert-vec slide-35-canvas bob 0.3 0.85 
+            #:show-indices? false)
+(insert-vec slide-35-canvas carol 0.5 0.7 
+            #:show-indices? false)
+(insert-vec slide-35-canvas dave 0.75 0.85 
+            #:show-indices? false)
 
-(point-struct-to-vec slide-35-canvas 35a-struct "name" alice)
-(point-struct-to-vec slide-35-canvas 35b-struct "name" bob)
-(point-struct-to-vec slide-35-canvas 35c-struct "name" carol)
-(point-struct-to-vec slide-35-canvas 35d-struct "name" dave)
+(point-struct-to-vec slide-35-canvas 35a-struct "name" alice
+                     #:from-find rc-find
+                     #:to-find ct-find
+                     #:start-angle 5.8
+                     #:start-pull 0.5
+                     #:end-angle 4)
+(point-struct-to-vec slide-35-canvas 35b-struct "name" bob
+                     #:from-find rc-find
+                     #:to-find ct-find
+                     #:start-angle 5.8
+                     #:start-pull 0.5
+                     #:end-angle 4)
+(point-struct-to-vec slide-35-canvas 35c-struct "name" carol
+                     #:from-find rc-find
+                     #:to-find ct-find
+                     #:start-angle 5.8
+                     #:start-pull 0.5
+                     #:end-angle 4)
+(point-struct-to-vec slide-35-canvas 35d-struct "name" dave
+                     #:from-find rc-find
+                     #:to-find ct-find
+                     #:start-angle 5.8
+                     #:start-pull 0.5
+                     #:end-angle 4)
+
+(point-vec-to-struct slide-35-canvas slide-35-spine-vector 0 35a-struct
+                     #:from-find lc-find
+                     #:to-find ct-find
+                     #:start-angle 3.1
+                     #:end-angle 4)
+(point-vec-to-struct slide-35-canvas slide-35-spine-vector 1 35b-struct
+                     #:from-find cb-find
+                     #:to-find ct-find)
+(point-vec-to-struct slide-35-canvas slide-35-spine-vector 2 35c-struct
+                     #:from-find cb-find
+                     #:to-find ct-find)
+(point-vec-to-struct slide-35-canvas slide-35-spine-vector 3 35d-struct
+                     #:from-find rc-find
+                     #:to-find ct-find
+                     #:start-angle 0
+                     #:end-angle 5)
 
 (canvas-final slide-35-canvas)
 
@@ -102,7 +143,8 @@
 (define slide-38-canvas (blank-canvas 300 200))
 
 (define slide-38-vector (make-vec-from-vec (make-vector 5 (ptr))))
-(insert-vec slide-38-canvas slide-38-vector 0.3 0.2 false)
+(insert-vec slide-38-canvas slide-38-vector 0.3 0.2 
+            #:show-indices? false)
 
 (define 38-1-struct (create-struct (list "x" "y")
                                    (list 16 1)))
@@ -118,10 +160,20 @@
 (insert-struct slide-38-canvas 38-3-struct 0.55 0.6)
 (insert-struct slide-38-canvas 38-4-struct 0.75 0.6)
 
-(point-vec-to-struct slide-38-canvas slide-38-vector 0 38-1-struct ct-find)
-(point-vec-to-struct slide-38-canvas slide-38-vector 1 38-2-struct ct-find)
-(point-vec-to-struct slide-38-canvas slide-38-vector 2 38-2-struct ct-find)
-(point-vec-to-struct slide-38-canvas slide-38-vector 3 38-3-struct ct-find)
-(point-vec-to-struct slide-38-canvas slide-38-vector 4 38-4-struct ct-find)
+(point-vec-to-struct slide-38-canvas slide-38-vector 0 38-1-struct
+                     #:to-find ct-find
+                     #:from-find cb-find)
+(point-vec-to-struct slide-38-canvas slide-38-vector 1 38-2-struct 
+                     #:to-find ct-find
+                     #:from-find cb-find)
+(point-vec-to-struct slide-38-canvas slide-38-vector 2 38-2-struct 
+                     #:to-find ct-find
+                     #:from-find cb-find)
+(point-vec-to-struct slide-38-canvas slide-38-vector 3 38-3-struct 
+                     #:to-find ct-find
+                     #:from-find cb-find)
+(point-vec-to-struct slide-38-canvas slide-38-vector 4 38-4-struct 
+                     #:to-find ct-find
+                     #:from-find cb-find)
 
 (canvas-final slide-38-canvas)

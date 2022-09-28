@@ -634,7 +634,7 @@
               slide-22-small-vector
               0.5
               0.4
-              false)
+              #:show-indices? false)
      (point-struct-to-vec slide-22-canvas
                           array-struct
                           "data"
@@ -649,7 +649,7 @@
               slide-22-large-vector
               0.4
               0.7
-              false)
+              #:show-indices? false)
      ])
   (cond
     [(> phase 6)

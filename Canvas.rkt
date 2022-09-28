@@ -28,7 +28,8 @@
   (define base (rectangle width height))
   (canvas (list) base))
 
-(define (insert-vec canvas vect x y show-indices?)
+(define (insert-vec canvas vect x y
+                    #:show-indices? [show-indices? #t])
   (set-canvas-reprs! canvas (append (canvas-reprs canvas) (list vect)))
   (redraw-vec vect)
   (if show-indices?
@@ -43,62 +44,47 @@
       ))
 
 
-(define (point-vec-to-vec canvas from from-index to [to-func lt-find])
+(define (point-vec-to-vec canvas from from-index to
+                          #:from-find [from-find rc-find]
+                          #:to-find [to-find lc-find]
+                          #:color [clr "Medium Violet Red"]
+                          #:start-angle [sa #f]
+                          #:end-angle [ea #f]
+                          #:start-pull [sp 1/4]
+                          #:end-pull [ep 1/4])
   (define real-from (vector-ref (vect-pic-contents from) from-index))
-  ;(set! real-from (ptr-base))
-  ;(redraw-vec from)
-
-  (define fromx 0)
-  (define fromy 0)
-  fromx fromy (cc-find (canvas-final canvas) real-from)
-  (define tox 0)
-  (define toy 0)
-  tox toy (lt-find (canvas-final canvas) (vect-final to))
-
-  (define sa 180)
-  (define fromfunc cb-find)
-  (cond
-    [(< fromy toy) (set! fromfunc ct-find)
-                   (set! sa 0)]
-    )
 
   (set-canvas-final! canvas
                      (pin-arrow-line 10 (canvas-final canvas)
-                                     real-from fromfunc
-                                     (vect-final-no-indices to) to-func
+                                     real-from from-find
+                                     (vect-final-no-indices to) to-find
                                      #:line-width 2
                                      #:start-angle sa
-                                     ;#:end-angle 345
-                                     #:color "Medium Violet Red")
+                                     #:end-angle ea
+                                     #:color clr
+                                     #:start-pull sp
+                                     #:end-pull ep)
                      ))
 
-(define (point-vec-to-struct canvas from from-index to [to-func lt-find])
+(define (point-vec-to-struct canvas from from-index to
+                             #:from-find [from-find rc-find]
+                             #:to-find [to-find lc-find]
+                             #:color [clr "Medium Violet Red"]
+                             #:start-angle [sa #f]
+                             #:end-angle [ea #f]
+                             #:start-pull [sp 1/4]
+                             #:end-pull [ep 1/4])
   (define real-from (vector-ref (vect-pic-contents from) from-index))
-  ;(set! real-from (ptr-base))
-  ;(redraw-vec from)
-
-  (define fromx 0)
-  (define fromy 0)
-  fromx fromy (cc-find (canvas-final canvas) real-from)
-  (define tox 0)
-  (define toy 0)
-  tox toy (lt-find (canvas-final canvas) (struct-struct-box to))
-
-  (define sa 180)
-  (define fromfunc cb-find)
-  (cond
-    [(< fromy toy) (set! fromfunc ct-find)
-                   (set! sa 0)]
-    )
-
   (set-canvas-final! canvas
                      (pin-arrow-line 10 (canvas-final canvas)
-                                     real-from fromfunc
-                                     (struct-struct-box to) to-func
+                                     real-from from-find
+                                     (struct-struct-box to) to-find
                                      #:line-width 2
                                      #:start-angle sa
-                                     ;#:end-angle 345
-                                     #:color "Medium Violet Red")
+                                     #:end-angle ea
+                                     #:start-pull sp
+                                     #:end-pull ep
+                                     #:color clr)
                      ))
 
 (define (insert-list canvas lst lst-x-coord lst-y-coord link?)
@@ -137,16 +123,22 @@
 
 (define (insert-struct canvas strct x y)
   (set-canvas-reprs! canvas (append (canvas-reprs canvas) (list strct)))
-  (draw-struct strct)
+  
   (set-canvas-final! canvas
                      (ppict-do (canvas-final canvas)
                                #:go  (coord x y 'lt)
                                (struct-struct-final strct)))
   )
 
-; Currently only handles struct -> vector pointing
-; Will expand functionality to be able to point to anything
-(define (point-struct-to-vec canvas from from-field to [to-func lt-find])
+
+(define (point-struct-to-vec canvas from from-field to
+                             #:from-find [from-find rc-find]
+                             #:to-find [to-find lc-find]
+                             #:color [clr "Medium Violet Red"]
+                             #:start-angle [sa #f]
+                             #:end-angle [ea #f]
+                             #:start-pull [sp 1/4]
+                             #:end-pull [ep 1/4])
   (define real-from (void))
   (for ([i (in-range (length (struct-struct-lst-field-names from)))])
     (if (equal? (list-ref (struct-struct-lst-field-names from) i) from-field)
@@ -154,24 +146,19 @@
         (void))
     )
   
-  (define fromx 0)
-  (define fromy 0)
-  fromx fromy (cc-find (canvas-final canvas) real-from)
-  (define tox 0)
-  (define toy 0)
-  tox toy (lt-find (canvas-final canvas) (vect-final-no-indices to))
 
-  (define sa 180)
-  (define fromfunc rc-find)
+  
 
   (set-canvas-final! canvas
                      (pin-arrow-line 10 (canvas-final canvas)
-                                     real-from fromfunc
-                                     (vect-final-no-indices to) to-func
+                                     real-from from-find
+                                     (vect-final-no-indices to) to-find
                                      #:line-width 2
                                      #:start-angle sa
-                                     ;#:end-angle 345
-                                     #:color "Medium Violet Red")
+                                     #:end-angle ea
+                                     #:start-pull sp
+                                     #:end-pull ep
+                                     #:color clr)
                      ))
 
 
@@ -199,6 +186,60 @@
                                      #:color clr)
                      ))
 
+
+(define (point-struct-to-node canvas from from-field to to-index
+                           #:from-find [from-find rc-find]
+                           #:to-find [to-find lc-find]
+                           #:color [clr "Medium Violet Red"]
+                           #:start-angle [sa #f]
+                           #:end-angle [ea #f]
+                           #:start-pull [sp 1/4]
+                           #:end-pull [ep 1/4])
+  (define real-from (void))
+  (for ([i (in-range (length (struct-struct-lst-field-names from)))])
+    (if (equal? (list-ref (struct-struct-lst-field-names from) i) from-field)
+        (set! real-from (list-ref (struct-struct-lst-pics from) i))
+        (void))
+    )
+  (define real-to (cons-node-box (list-ref (cons-list-nodes to) to-index)))
+  (set-canvas-final! canvas
+                     (pin-arrow-line 10 (canvas-final canvas)
+                                     real-from from-find
+                                     real-to to-find
+                                     #:line-width 2
+                                     #:start-angle sa
+                                     #:end-angle ea
+                                     #:start-pull sp
+                                     #:end-pull ep
+                                     #:color clr)
+                     ))
+
+(define (point-struct-to-struct canvas from from-field to 
+                           #:from-find [from-find rc-find]
+                           #:to-find [to-find lc-find]
+                           #:color [clr "Medium Violet Red"]
+                           #:start-angle [sa #f]
+                           #:end-angle [ea #f]
+                           #:start-pull [sp 1/4]
+                           #:end-pull [ep 1/4])
+  (define real-from (void))
+  (for ([i (in-range (length (struct-struct-lst-field-names from)))])
+    (if (equal? (list-ref (struct-struct-lst-field-names from) i) from-field)
+        (set! real-from (list-ref (struct-struct-lst-pics from) i))
+        (void))
+    )
+  
+  (set-canvas-final! canvas
+                     (pin-arrow-line 10 (canvas-final canvas)
+                                     real-from from-find
+                                     (struct-struct-box to) to-find
+                                     #:line-width 2
+                                     #:start-angle sa
+                                     #:end-angle ea
+                                     #:start-pull sp
+                                     #:end-pull ep
+                                     #:color clr)
+                     ))
 
 #|
 (println "begins here")
