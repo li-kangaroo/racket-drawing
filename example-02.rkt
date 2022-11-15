@@ -29,13 +29,13 @@
                slide-8-lst-1
                (list 0.1 0.3 0.5 0.7)
                (list 0.4 0.4 0.4 0.4)
-               false)
+               #:link-nodes? false)
   
   (insert-list slide-8-canvas
                slide-8-lst-2
                (list 0.4)
                (list 0.7)
-               false)
+               #:link-nodes? false)
   (cond
     [(< phase 5)
      (link-node-to-node slide-8-canvas slide-8-lst-1 0 slide-8-lst-1 1
@@ -68,7 +68,7 @@
                slide-8-lst-3
                (list 0.2 0.6)
                (list 0.2 0.2)
-               false)
+               #:link-nodes? false)
      (link-node-to-node slide-8-canvas slide-8-lst-1 1 slide-8-lst-2 0
                         #:from-find cb-find
                         #:to-find lt-find)
@@ -80,7 +80,7 @@
                slide-8-lst-3
                (list 0.2 0.6)
                (list 0.2 0.2)
-               false)
+               #:link-nodes? false)
      (link-node-to-node slide-8-canvas slide-8-lst-1 0 slide-8-lst-3 1
                         #:from-find ct-find
                         #:to-find ct-find
@@ -145,24 +145,24 @@
      (insert-list slide-9-canvas
                   slide-9-lst-1
                   (list 0.15 0.25 0.35 0.45 0.55 0.65 0.75)
-                  (list 0.75 0.75 0.75 0.75 0.75 0.75 0.75)
-                  true)]
+                  (list 0.75 0.75 0.75 0.75 0.75 0.75 0.75))]
     [else
      (insert-list slide-9-canvas
                   slide-9-lst-2
                   (list 0.05 0.15 0.25 0.35 0.45 0.55 0.65 0.75)
-                  (list 0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75)
-                  true)])
+                  (list 0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75))])
   (cond
     [(> phase 2)
-     (insert-struct slide-9-canvas
-                    lst-struct
-                    0.03 0.1)])
+     (insert slide-9-canvas
+             lst-struct
+             (struct-pict-getter lst-struct)
+             0.03 0.1)])
   (cond
     [(> phase 5)
-     (insert-struct slide-9-canvas
-                    head-struct
-                    0.005 0.45)
+     (insert slide-9-canvas
+             head-struct
+             (struct-pict-getter head-struct)
+             0.005 0.45)
      (point-struct-to-struct slide-9-canvas
                              lst-struct
                              "lst"
@@ -332,27 +332,29 @@
   (insert-list slide-18-canvas
                   slide-18-lst-1
                   (list 0.25 0.375 0.5 0.625 0.75 0.875)
-                  (list 0.65 0.65 0.65 0.65 0.65 0.65)
-                  true)
+                  (list 0.65 0.65 0.65 0.65 0.65 0.65))
   (cond
     [(or (= phase 1))
-     (insert-struct slide-18-canvas
-                    head-struct
-                    0.1 0.15)
-     (point-struct-to-node slide-18-canvas
-                           head-struct
-                           "head"
-                           slide-18-lst-1
-                           0
-                           #:to-find ct-find
-                           #:start-angle 0
-                           #:end-angle (* 6 (/ pi 4))
-                           #:start-pull 0.5
-                           )]
+     (insert slide-18-canvas
+             head-struct
+             (struct-pict-getter head-struct)
+             0.1 0.15)
+     (point-x-to-y slide-18-canvas
+                   head-struct
+                   (struct-loc-getter head-struct #:field "head")
+                   slide-18-lst-1
+                   (list-loc-getter slide-18-lst-1 #:content? #f #:index 0)
+                   #:to-find ct-find
+                   #:start-angle 0
+                   #:end-angle (* 6 (/ pi 4))
+                   #:start-pull 0.5
+                   )
+     ]
     [else
-     (insert-struct slide-18-canvas
-                    head-tail-struct
-                    0.1 0.15)
+     (insert slide-18-canvas
+             head-tail-struct
+             (struct-pict-getter head-tail-struct)
+             0.1 0.15)
      (point-struct-to-node slide-18-canvas
                            head-tail-struct
                            "head"
@@ -395,7 +397,6 @@
 (define (slide-21-animator phase)
   (printf "slide 21, phase ~a \n" phase)
   (define slide-21-canvas (blank-canvas 550 250))
-  (define slide-21-lst-1 (make-list-from-list (list 1 2 3 4 5 6 )))
 
   (define len 6)
   (define 5-next (ptr))
@@ -408,9 +409,10 @@
   (define head-tail-struct
     (create-struct (list "head" "tail" "len")
                    (list (ptr) (ptr) len)))
-  (insert-struct slide-21-canvas
-                 head-tail-struct
-                 0.01 0.15)
+  (insert slide-21-canvas
+          head-tail-struct
+          (struct-pict-getter head-tail-struct)
+          0.01 0.15)
   
   (define dll-node-1 (make-dll-node 1 (null-ptr) (ptr)))
   (define dll-node-2 (make-dll-node 2 (ptr) (ptr)))
@@ -418,24 +420,31 @@
   (define dll-node-4 (make-dll-node 4 (ptr) (ptr)))
   (define dll-node-5 (make-dll-node 5 (ptr) 5-next))
   (define dll-node-6 (make-dll-node 6 (ptr) (null-ptr)))
-  (insert-struct slide-21-canvas
-                 dll-node-1
-                 0.1 0.65)
-  (insert-struct slide-21-canvas
-                 dll-node-2
-                 0.25 0.65)
-  (insert-struct slide-21-canvas
-                 dll-node-3
-                 0.4 0.65)
-  (insert-struct slide-21-canvas
-                 dll-node-4
-                 0.55 0.65)
-  (insert-struct slide-21-canvas
-                 dll-node-5
-                 0.7 0.65)
-  (insert-struct slide-21-canvas
-                 dll-node-6
-                 0.85 0.65)
+  (insert slide-21-canvas
+          dll-node-1
+          (struct-pict-getter dll-node-1)
+          0.1 0.65)
+  (insert slide-21-canvas
+          dll-node-1
+          (struct-pict-getter dll-node-2)
+          0.25 0.65)
+  (insert slide-21-canvas
+          dll-node-1
+          (struct-pict-getter dll-node-3)
+          0.4 0.65)
+  (insert slide-21-canvas
+          dll-node-1
+          (struct-pict-getter dll-node-4)
+          0.55 0.65)
+  (insert slide-21-canvas
+          dll-node-1
+          (struct-pict-getter dll-node-5)
+          0.7 0.65)
+  (insert slide-21-canvas
+          dll-node-1
+          (struct-pict-getter dll-node-6)
+          0.85 0.65)
+  
   (point-struct-to-struct slide-21-canvas
                           head-tail-struct
                           "head"
@@ -587,10 +596,11 @@
   (define array-struct
     (create-struct (list "data" "len")
                    (list (ptr) len)))
-  (insert-struct slide-22-canvas
-                 array-struct
-                 0.03
-                 0.4)
+  (insert slide-22-canvas
+          array-struct
+          (struct-pict-getter array-struct)
+          0.03
+          0.4)
 
   (define slide-22-small-vector (make-vec-from-vec (vector 2 null null null)))
   (define slide-22-large-vector (make-vec-from-vec
@@ -630,11 +640,11 @@
 
   (cond
     [(< phase 7)
-     (insert-vec slide-22-canvas
-              slide-22-small-vector
+     (insert slide-22-canvas
+             slide-22-small-vector
+             (vec-pict-getter slide-22-small-vector #:show-indices? false)
               0.5
-              0.4
-              #:show-indices? false)
+              0.4)
      (point-struct-to-vec slide-22-canvas
                           array-struct
                           "data"
@@ -645,11 +655,11 @@
                           )])
   (cond
     [(> phase 4)
-     (insert-vec slide-22-canvas
-              slide-22-large-vector
+     (insert slide-22-canvas
+             slide-22-large-vector
+             (vec-pict-getter slide-22-large-vector #:show-indices? false)
               0.4
-              0.7
-              #:show-indices? false)
+              0.7)
      ])
   (cond
     [(> phase 6)

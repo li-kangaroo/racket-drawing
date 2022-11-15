@@ -144,6 +144,18 @@
   (draw-list conslist)
   )
 
+(define (list-loc-getter lst
+                         #:content? [content? #f]
+                         #:index [index 0])
+  (cond
+        [content?
+         (cons-node-data-pic (list-ref (cons-list-nodes lst) index))]
+        [else
+         (cons-node-box (list-ref (cons-list-nodes lst) index))]
+        )
+  )
+
+
 #|
 (define a (make-list-from-list (list 1 2 3 4)))
 (draw-list a)

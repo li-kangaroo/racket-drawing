@@ -115,6 +115,26 @@
   (set-struct-struct-final! strct final-pic)
   (struct-struct-final strct))
 
+(define (struct-pict-getter strct)
+  (struct-struct-final strct))
+
+(define (struct-loc-getter strct
+                           #:field [field #f])
+  (cond
+        [field
+         (define loc (void))
+         (for ([i (in-range (length (struct-struct-lst-field-names strct)))])
+           (if (equal? (list-ref (struct-struct-lst-field-names strct) i) field)
+               (set! loc (list-ref (struct-struct-lst-pics strct) i))
+               (void))
+           )
+         loc]
+        [else
+         (struct-struct-box strct)]
+        )
+  )
+
+
 ;(define test-struct (create-struct
 ;                     (list "number"
 ;                           "name"

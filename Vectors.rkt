@@ -60,8 +60,28 @@
   )
 
 
-(define (draw-vec vec)
-  (vect-final vec))
+(define (vec-pict-getter vec
+                          #:show-indices? [show-indices? #t])
+  (if show-indices?
+      (vect-final vec)
+      (vect-final-no-indices vec))
+  )
+
+(define (vec-loc-getter vec
+                         #:content? [content? #f]
+                         #:index [index #f]
+                         )
+  (cond
+        [content?
+         (if index
+             (vector-ref (vect-pic-contents vec) index)
+             (error "please specify index - which content do you want to point from?"))]
+        [else
+         (if index
+             (vector-ref (vect-boxes vec) index)
+             (vect-final-no-indices vec))]
+        ))
+
 
 (define (redraw-vec vec)
   (define final-pic (blank 0))

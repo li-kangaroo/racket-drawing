@@ -12,7 +12,6 @@
 
 (provide (all-defined-out))
 
-
 (struct canvas
   (reprs final)
   #:mutable
@@ -28,20 +27,70 @@
   (define base (rectangle width height))
   (canvas (list) base))
 
-(define (insert-vec canvas vect x y
-                    #:show-indices? [show-indices? #t])
-  (set-canvas-reprs! canvas (append (canvas-reprs canvas) (list vect)))
-  (redraw-vec vect)
-  (if show-indices?
-      (set-canvas-final! canvas
-                         (ppict-do (canvas-final canvas)
-                                   #:go  (coord x y 'lt)
-                                   (vect-final vect)))
-      (set-canvas-final! canvas
-                         (ppict-do (canvas-final canvas)
-                                   #:go  (coord x y 'lt)
-                                   (vect-final-no-indices vect)))
-      ))
+(define (insert canvas target target-pict x y
+                #:finder [finder 'lt])
+  (set-canvas-reprs! canvas (append (canvas-reprs canvas) (list target)))
+  (set-canvas-final! canvas
+                     (ppict-do (canvas-final canvas)
+                               #:go  (coord x y finder)
+                               target-pict))
+  )
+
+(define (insert-list canvas lst lst-x-coord lst-y-coord
+                     #:link-nodes? [link? #t])
+  (cond
+    [(not (= (length lst-x-coord) (length lst-y-coord)))
+     (error "need equal number of x and y coordinates")]
+    [(not (= (length lst-x-coord) (length (cons-list-nodes lst))))
+      (error "need equal number of nodes and coordinates")]
+    )
+  (set-canvas-reprs! canvas (append (canvas-reprs canvas) (list lst)))
+  (for ([i (in-range (length lst-x-coord))])
+    (define node (list-ref (cons-list-nodes lst) i))
+    (define node-pic (cons-node-final node))
+    (set-canvas-final! canvas
+                       (ppict-do (canvas-final canvas)
+                                 #:go  (coord (list-ref lst-x-coord i)
+                                              (list-ref lst-y-coord i)
+                                              'lt)
+                                 node-pic))
+    )
+  (if link?
+      (for ([i (in-range (- (length (cons-list-nodes lst)) 1))])
+        (define from (list-ref (cons-list-nodes lst) i))
+        (define to (list-ref (cons-list-nodes lst) (+ i 1)))
+        (set-canvas-final! canvas
+                           (pin-arrow-line 10 (canvas-final canvas)
+                                           (cons-node-next-pic from) rc-find
+                                           (cons-node-box to) lc-find
+                                           ;TODO - user customisable locations
+                                           #:line-width 2
+                                           #:color "Medium Violet Red"
+                                           ))
+        )
+      (void))
+  )
+
+(define (point-x-to-y canvas x x-loc y y-loc
+                      #:from-find [from-find rc-find]
+                      #:to-find [to-find lc-find]
+                      #:color [clr "Medium Violet Red"]
+                      #:start-angle [sa #f]
+                      #:end-angle [ea #f]
+                      #:start-pull [sp 1/4]
+                      #:end-pull [ep 1/4])
+
+  (set-canvas-final! canvas
+                     (pin-arrow-line 10 (canvas-final canvas)
+                                     x-loc from-find
+                                     y-loc to-find
+                                     #:line-width 2
+                                     #:start-angle sa
+                                     #:end-angle ea
+                                     #:start-pull sp
+                                     #:end-pull ep
+                                     #:color clr)
+                     ))
 
 
 (define (point-vec-to-vec canvas from from-index to
@@ -86,50 +135,6 @@
                                      #:end-pull ep
                                      #:color clr)
                      ))
-
-(define (insert-list canvas lst lst-x-coord lst-y-coord link?)
-  (cond
-    [(not (= (length lst-x-coord) (length lst-y-coord)))
-     (error "need equal number of x and y coordinates")]
-    [(not (= (length lst-x-coord) (length (cons-list-nodes lst))))
-      (error "need equal number of nodes and coordinates")]
-    )
-  (set-canvas-reprs! canvas (append (canvas-reprs canvas) (list lst)))
-  (for ([i (in-range (length lst-x-coord))])
-    (define node (list-ref (cons-list-nodes lst) i))
-    (define node-pic (cons-node-final node))
-    (set-canvas-final! canvas
-                       (ppict-do (canvas-final canvas)
-                                 #:go  (coord (list-ref lst-x-coord i)
-                                              (list-ref lst-y-coord i)
-                                              'lt)
-                                 node-pic))
-    )
-  (if link?
-      (for ([i (in-range (- (length (cons-list-nodes lst)) 1))])
-        (define from (list-ref (cons-list-nodes lst) i))
-        (define to (list-ref (cons-list-nodes lst) (+ i 1)))
-        (set-canvas-final! canvas
-                           (pin-arrow-line 10 (canvas-final canvas)
-                                           (cons-node-next-pic from) rc-find
-                                           (cons-node-box to) lc-find
-                                           ;TODO - user customisable locations
-                                           #:line-width 2
-                                           #:color "Medium Violet Red"
-                                           ))
-        )
-      (void))
-  )
-
-(define (insert-struct canvas strct x y)
-  (set-canvas-reprs! canvas (append (canvas-reprs canvas) (list strct)))
-  
-  (set-canvas-final! canvas
-                     (ppict-do (canvas-final canvas)
-                               #:go  (coord x y 'lt)
-                               (struct-struct-final strct)))
-  )
-
 
 (define (point-struct-to-vec canvas from from-field to
                              #:from-find [from-find rc-find]
@@ -240,6 +245,36 @@
                                      #:end-pull ep
                                      #:color clr)
                      ))
+
+
+
+#|
+(define (insert-vec canvas vect x y
+                    #:show-indices? [show-indices? #t])
+  (set-canvas-reprs! canvas (append (canvas-reprs canvas) (list vect)))
+  (redraw-vec vect)
+  (if show-indices?
+      (set-canvas-final! canvas
+                         (ppict-do (canvas-final canvas)
+                                   #:go  (coord x y 'lt)
+                                   (vect-final vect)))
+      (set-canvas-final! canvas
+                         (ppict-do (canvas-final canvas)
+                                   #:go  (coord x y 'lt)
+                                   (vect-final-no-indices vect)))
+      ))
+
+(define (insert-struct canvas strct x y)
+  (set-canvas-reprs! canvas (append (canvas-reprs canvas) (list strct)))
+  
+  (set-canvas-final! canvas
+                     (ppict-do (canvas-final canvas)
+                               #:go  (coord x y 'lt)
+                               (struct-struct-final strct)))
+  )
+
+
+|#
 
 #|
 (println "begins here")
