@@ -149,9 +149,9 @@
                          #:index [index 0])
   (cond
         [content?
-         (cons-node-data-pic (list-ref (cons-list-nodes lst) index))]
+         (vector lst (cons-node-data-pic (list-ref (cons-list-nodes lst) index)))]
         [else
-         (cons-node-box (list-ref (cons-list-nodes lst) index))]
+         (vector lst (cons-node-box (list-ref (cons-list-nodes lst) index)))]
         )
   )
 

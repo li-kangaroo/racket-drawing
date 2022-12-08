@@ -154,13 +154,11 @@
   (cond
     [(> phase 2)
      (insert slide-9-canvas
-             lst-struct
              (struct-pict-getter lst-struct)
              0.03 0.1)])
   (cond
     [(> phase 5)
      (insert slide-9-canvas
-             head-struct
              (struct-pict-getter head-struct)
              0.005 0.45)
      (point-struct-to-struct slide-9-canvas
@@ -336,13 +334,10 @@
   (cond
     [(or (= phase 1))
      (insert slide-18-canvas
-             head-struct
              (struct-pict-getter head-struct)
              0.1 0.15)
      (point-x-to-y slide-18-canvas
-                   head-struct
                    (struct-loc-getter head-struct #:field "head")
-                   slide-18-lst-1
                    (list-loc-getter slide-18-lst-1 #:content? #f #:index 0)
                    #:to-find ct-find
                    #:start-angle 0
@@ -352,7 +347,6 @@
      ]
     [else
      (insert slide-18-canvas
-             head-tail-struct
              (struct-pict-getter head-tail-struct)
              0.1 0.15)
      (point-struct-to-node slide-18-canvas
@@ -410,7 +404,6 @@
     (create-struct (list "head" "tail" "len")
                    (list (ptr) (ptr) len)))
   (insert slide-21-canvas
-          head-tail-struct
           (struct-pict-getter head-tail-struct)
           0.01 0.15)
   
@@ -421,27 +414,21 @@
   (define dll-node-5 (make-dll-node 5 (ptr) 5-next))
   (define dll-node-6 (make-dll-node 6 (ptr) (null-ptr)))
   (insert slide-21-canvas
-          dll-node-1
           (struct-pict-getter dll-node-1)
           0.1 0.65)
   (insert slide-21-canvas
-          dll-node-1
           (struct-pict-getter dll-node-2)
           0.25 0.65)
   (insert slide-21-canvas
-          dll-node-1
           (struct-pict-getter dll-node-3)
           0.4 0.65)
   (insert slide-21-canvas
-          dll-node-1
           (struct-pict-getter dll-node-4)
           0.55 0.65)
   (insert slide-21-canvas
-          dll-node-1
           (struct-pict-getter dll-node-5)
           0.7 0.65)
   (insert slide-21-canvas
-          dll-node-1
           (struct-pict-getter dll-node-6)
           0.85 0.65)
   
@@ -597,7 +584,6 @@
     (create-struct (list "data" "len")
                    (list (ptr) len)))
   (insert slide-22-canvas
-          array-struct
           (struct-pict-getter array-struct)
           0.03
           0.4)
@@ -641,7 +627,6 @@
   (cond
     [(< phase 7)
      (insert slide-22-canvas
-             slide-22-small-vector
              (vec-pict-getter slide-22-small-vector #:show-indices? false)
               0.5
               0.4)
@@ -656,7 +641,6 @@
   (cond
     [(> phase 4)
      (insert slide-22-canvas
-             slide-22-large-vector
              (vec-pict-getter slide-22-large-vector #:show-indices? false)
               0.4
               0.7)

@@ -27,8 +27,10 @@
   (define base (rectangle width height))
   (canvas (list) base))
 
-(define (insert canvas target target-pict x y
+(define (insert canvas call-pict-getter-on-target x y
                 #:finder [finder 'lt])
+  (define target (vector-ref call-pict-getter-on-target 0))
+  (define target-pict (vector-ref call-pict-getter-on-target 1))
   (set-canvas-reprs! canvas (append (canvas-reprs canvas) (list target)))
   (set-canvas-final! canvas
                      (ppict-do (canvas-final canvas)
@@ -71,7 +73,9 @@
       (void))
   )
 
-(define (point-x-to-y canvas x x-loc y y-loc
+(define (point-x-to-y canvas
+                      call-loc-getter-on-x
+                      call-loc-getter-on-y
                       #:from-find [from-find rc-find]
                       #:to-find [to-find lc-find]
                       #:color [clr "Medium Violet Red"]
@@ -79,7 +83,11 @@
                       #:end-angle [ea #f]
                       #:start-pull [sp 1/4]
                       #:end-pull [ep 1/4])
-
+  (define x (vector-ref call-loc-getter-on-x 0))
+  (define x-loc (vector-ref call-loc-getter-on-x 1))
+  (define y (vector-ref call-loc-getter-on-y 0))
+  (define y-loc (vector-ref call-loc-getter-on-y 1))
+  
   (set-canvas-final! canvas
                      (pin-arrow-line 10 (canvas-final canvas)
                                      x-loc from-find

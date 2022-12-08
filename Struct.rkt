@@ -116,7 +116,7 @@
   (struct-struct-final strct))
 
 (define (struct-pict-getter strct)
-  (struct-struct-final strct))
+  (vector strct (struct-struct-final strct)))
 
 (define (struct-loc-getter strct
                            #:field [field #f])
@@ -128,9 +128,9 @@
                (set! loc (list-ref (struct-struct-lst-pics strct) i))
                (void))
            )
-         loc]
+         (vector strct loc)]
         [else
-         (struct-struct-box strct)]
+         (vector strct (struct-struct-box strct))]
         )
   )
 

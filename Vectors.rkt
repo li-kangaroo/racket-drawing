@@ -63,8 +63,8 @@
 (define (vec-pict-getter vec
                           #:show-indices? [show-indices? #t])
   (if show-indices?
-      (vect-final vec)
-      (vect-final-no-indices vec))
+      (vector vec (vect-final vec))
+      (vector vec (vect-final-no-indices vec)))
   )
 
 (define (vec-loc-getter vec
@@ -74,12 +74,12 @@
   (cond
         [content?
          (if index
-             (vector-ref (vect-pic-contents vec) index)
+             (vector vec (vector-ref (vect-pic-contents vec) index))
              (error "please specify index - which content do you want to point from?"))]
         [else
          (if index
-             (vector-ref (vect-boxes vec) index)
-             (vect-final-no-indices vec))]
+             (vector vec (vector-ref (vect-boxes vec) index))
+             (vector vec (vect-final-no-indices vec)))]
         ))
 
 
