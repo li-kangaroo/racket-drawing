@@ -154,18 +154,17 @@
   (cond
     [(> phase 2)
      (insert slide-9-canvas
-             (struct-pict-getter lst-struct)
+             lst-struct
              0.03 0.1)])
   (cond
     [(> phase 5)
      (insert slide-9-canvas
-             (struct-pict-getter head-struct)
+             head-struct
              0.005 0.45)
-     (point-struct-to-struct slide-9-canvas
-                             lst-struct
-                             "lst"
-                             head-struct
-                             #:from-find cb-find
+     (point-x-to-y slide-9-canvas
+                   (struct-src-getter lst-struct "lst")
+                   (struct-dst-getter head-struct)
+                   #:from-find cb-find
                              #:to-find ct-find)])
     
   
@@ -173,134 +172,105 @@
     [(= phase 1)]
     [(= phase 2)]
     [(= phase 3)
-     (point-struct-to-node slide-9-canvas
-                           lst-struct
-                           "lst"
-                           slide-9-lst-1
-                           0
-                           #:to-find ct-find
-                           #:start-angle 0
-                           #:end-angle (* 6 (/ pi 4))
-                           #:start-pull 0.5
-                           )
-     
+     (point-x-to-y slide-9-canvas
+                   (struct-src-getter lst-struct "lst")
+                   (list-dst-getter slide-9-lst-1 0)
+                   #:to-find ct-find
+                   #:start-angle 0
+                   #:end-angle (* 6 (/ pi 4))
+                   #:start-pull 0.5)
      ]
     [(= phase 4)
-     (point-struct-to-node slide-9-canvas
-                           lst-struct
-                           "lst"
-                           slide-9-lst-2
-                           1
-                           #:to-find ct-find
-                           #:start-angle 0
-                           #:end-angle (* 6 (/ pi 4))
-                           #:start-pull 0.5
-                           )
+     (point-x-to-y slide-9-canvas
+                   (struct-src-getter lst-struct "lst")
+                   (list-dst-getter slide-9-lst-2 1)
+                   #:to-find ct-find
+                   #:start-angle 0
+                   #:end-angle (* 6 (/ pi 4))
+                   #:start-pull 0.5)
      ]
     [(= phase 5)
-     (point-struct-to-node slide-9-canvas
-                           lst-struct
-                           "lst"
-                           slide-9-lst-2
-                           1
-                           #:to-find ct-find
-                           #:start-angle 0
-                           #:end-angle (* 6 (/ pi 4))
-                           #:start-pull 0.5
-                           #:color "Gray"
-                           )
-     (point-struct-to-node slide-9-canvas
-                           lst-struct
-                           "lst"
-                           slide-9-lst-2
-                           0
-                           #:to-find rt-find
-                           #:start-angle 0
-                           #:end-angle (* 5 (/ pi 4))
-                           #:start-pull 0.5
-                           )
+     (point-x-to-y slide-9-canvas
+                   (struct-src-getter lst-struct "lst")
+                   (list-dst-getter slide-9-lst-2 1)
+                   #:to-find ct-find
+                   #:start-angle 0
+                   #:end-angle (* 6 (/ pi 4))
+                   #:start-pull 0.5
+                   #:color "Gray")
+     (point-x-to-y slide-9-canvas
+                   (struct-src-getter lst-struct "lst")
+                   (list-dst-getter slide-9-lst-2 0)
+                   #:to-find ct-find
+                   #:start-angle 0
+                   #:end-angle (* 5 (/ pi 4))
+                   #:start-pull 0.5)
+     
      ]
     [(= phase 6)
-     (point-struct-to-node slide-9-canvas
-                           head-struct
-                           "head"
-                           slide-9-lst-1
-                           0
-                           #:to-find lt-find
-                           #:start-angle 0
-                           #:end-angle (* 6.5 (/ pi 4))
-                           #:start-pull 0.5
-                           )
+     (point-x-to-y slide-9-canvas
+                   (struct-src-getter head-struct "head")
+                   (list-dst-getter slide-9-lst-1 0)
+                   #:to-find ct-find
+                   #:start-angle 0
+                   #:end-angle (* 6.5 (/ pi 4))
+                   #:start-pull 0.5)
      ]
     [(= phase 7)
-     (point-struct-to-node slide-9-canvas
-                           head-struct
-                           "head"
-                           slide-9-lst-2
-                           1
-                           #:to-find lt-find
-                           #:start-angle 0
-                           #:end-angle (* 6.5 (/ pi 4))
-                           #:start-pull 0.5
-                           )
+     (point-x-to-y slide-9-canvas
+                   (struct-src-getter head-struct "head")
+                   (list-dst-getter slide-9-lst-2 1)
+                   #:to-find ct-find
+                   #:start-angle 0
+                   #:end-angle (* 6.5 (/ pi 4))
+                   #:start-pull 0.5)
+     
      ]
     [(= phase 8)
-     (point-struct-to-node slide-9-canvas
-                           head-struct
-                           "head"
-                           slide-9-lst-2
-                           1
-                           #:to-find lt-find
-                           #:start-angle 0
-                           #:end-angle (* 6.5 (/ pi 4))
-                           #:start-pull 0.5
-                           #:color "Gray"
-                           )
-     (point-struct-to-node slide-9-canvas
-                           head-struct
-                           "head"
-                           slide-9-lst-2
-                           0
-                           #:to-find rt-find
-                           #:start-angle 0
-                           #:end-angle (* 5 (/ pi 4))
-                           #:start-pull 0.5
-                           )
+     (point-x-to-y slide-9-canvas
+                   (struct-src-getter head-struct "head")
+                   (list-dst-getter slide-9-lst-2 1)
+                   #:to-find ct-find
+                   #:start-angle 0
+                   #:end-angle (* 6.5 (/ pi 4))
+                   #:start-pull 0.5
+                   #:color "Gray")
+     (point-x-to-y slide-9-canvas
+                   (struct-src-getter head-struct "head")
+                   (list-dst-getter slide-9-lst-2 0)
+                   #:to-find ct-find
+                   #:start-angle 0
+                   #:end-angle (* 5 (/ pi 4))
+                   #:start-pull 0.5)
+     
      ]
     [(= phase 9)
-     (point-struct-to-node slide-9-canvas
-                           head-struct
-                           "head"
-                           slide-9-lst-2
-                           0
-                           #:to-find rt-find
-                           #:start-angle 0
-                           #:end-angle (* 5 (/ pi 4))
-                           #:start-pull 0.5
-                           )
+     (point-x-to-y slide-9-canvas
+                   (struct-src-getter head-struct "head")
+                   (list-dst-getter slide-9-lst-2 0)
+                   #:to-find rt-find
+                   #:start-angle 0
+                   #:end-angle (* 5 (/ pi 4))
+                   #:start-pull 0.5)
+     
      ]
     [(= phase 10)
-     (point-struct-to-node slide-9-canvas
-                           head-struct
-                           "head"
-                           slide-9-lst-2
-                           0
-                           #:to-find rt-find
-                           #:start-angle 0
-                           #:end-angle (* 5 (/ pi 4))
-                           #:start-pull 0.5
-                           #:color "Gray"
-                           )
-     (point-struct-to-node slide-9-canvas
-                           head-struct
-                           "head"
-                           slide-9-lst-2
-                           1
-                           #:to-find lt-find
-                           #:start-angle 0
-                           #:end-angle (* 6.5 (/ pi 4))
-                           #:start-pull 0.5
-                           )
+     (point-x-to-y slide-9-canvas
+                   (struct-src-getter head-struct "head")
+                   (list-dst-getter slide-9-lst-2 0)
+                   #:to-find rt-find
+                   #:start-angle 0
+                   #:end-angle (* 5 (/ pi 4))
+                   #:start-pull 0.5
+                   #:color "Gray")
+     
+     (point-x-to-y slide-9-canvas
+                   (struct-src-getter head-struct "head")
+                   (list-dst-getter slide-9-lst-2 1)
+                   #:to-find lt-find
+                   #:start-angle 0
+                   #:end-angle (* 6.5 (/ pi 4))
+                   #:start-pull 0.5)
      ]
 
 
@@ -334,11 +304,11 @@
   (cond
     [(or (= phase 1))
      (insert slide-18-canvas
-             (struct-pict-getter head-struct)
+             head-struct
              0.1 0.15)
      (point-x-to-y slide-18-canvas
-                   (struct-loc-getter head-struct #:field "head")
-                   (list-loc-getter slide-18-lst-1 #:content? #f #:index 0)
+                   (struct-src-getter head-struct "head")
+                   (list-dst-getter slide-18-lst-1 0)
                    #:to-find ct-find
                    #:start-angle 0
                    #:end-angle (* 6 (/ pi 4))
@@ -347,28 +317,23 @@
      ]
     [else
      (insert slide-18-canvas
-             (struct-pict-getter head-tail-struct)
+             head-tail-struct
              0.1 0.15)
-     (point-struct-to-node slide-18-canvas
-                           head-tail-struct
-                           "head"
-                           slide-18-lst-1
-                           0
-                           #:to-find ct-find
-                           #:start-angle 0
-                           #:end-angle (* 6 (/ pi 4))
-                           #:start-pull 0.5
-                           )
-     (point-struct-to-node slide-18-canvas
-                           head-tail-struct
-                           "tail"
-                           slide-18-lst-1
-                           5
-                           #:to-find ct-find
-                           #:start-angle 0
-                           #:end-angle (* 7 (/ pi 4))
-                           #:start-pull 0.5
-                           )
+     (point-x-to-y slide-18-canvas
+                   (struct-src-getter head-tail-struct "head")
+                   (list-dst-getter slide-18-lst-1 0)
+                   #:to-find ct-find
+                   #:start-angle 0
+                   #:end-angle (* 6 (/ pi 4))
+                   #:start-pull 0.5)
+
+     (point-x-to-y slide-18-canvas
+                   (struct-src-getter head-tail-struct "tail")
+                   (list-dst-getter slide-18-lst-1 5)
+                   #:to-find ct-find
+                   #:start-angle 0
+                   #:end-angle (* 7 (/ pi 4))
+                   #:start-pull 0.5)
      ])
 
 
@@ -380,6 +345,8 @@
 
 (slide-18-animator 1)
 (slide-18-animator 2)
+
+
 
 ;Slide 21: DLL
 (println "Slide 21 demo")
@@ -404,7 +371,7 @@
     (create-struct (list "head" "tail" "len")
                    (list (ptr) (ptr) len)))
   (insert slide-21-canvas
-          (struct-pict-getter head-tail-struct)
+          head-tail-struct
           0.01 0.15)
   
   (define dll-node-1 (make-dll-node 1 (null-ptr) (ptr)))
@@ -414,150 +381,94 @@
   (define dll-node-5 (make-dll-node 5 (ptr) 5-next))
   (define dll-node-6 (make-dll-node 6 (ptr) (null-ptr)))
   (insert slide-21-canvas
-          (struct-pict-getter dll-node-1)
+          dll-node-1
           0.1 0.65)
   (insert slide-21-canvas
-          (struct-pict-getter dll-node-2)
+          dll-node-2
           0.25 0.65)
   (insert slide-21-canvas
-          (struct-pict-getter dll-node-3)
+          dll-node-3
           0.4 0.65)
   (insert slide-21-canvas
-          (struct-pict-getter dll-node-4)
+          dll-node-4
           0.55 0.65)
   (insert slide-21-canvas
-          (struct-pict-getter dll-node-5)
+          dll-node-5
           0.7 0.65)
   (insert slide-21-canvas
-          (struct-pict-getter dll-node-6)
+          dll-node-6
           0.85 0.65)
-  
-  (point-struct-to-struct slide-21-canvas
-                          head-tail-struct
-                          "head"
-                          dll-node-1
-                          #:to-find ct-find
-                          #:start-angle 0
-                          #:start-pull 0.3
-                          #:end-angle (* 3 (/ pi 2)))
-  (point-struct-to-struct slide-21-canvas
-                          dll-node-1
-                          "next"
-                          dll-node-2
-                          #:to-find lb-find
-                          #:start-angle 5.8
-                          #:start-pull 0.05
-                          #:end-angle 0.5
-                          #:end-pull 0.5)
-  (point-struct-to-struct slide-21-canvas
-                          dll-node-2
-                          "next"
-                          dll-node-3
-                          #:to-find lb-find
-                          #:start-angle 5.8
-                          #:start-pull 0.05
-                          #:end-angle 0.5
-                          #:end-pull 0.5)
-  (point-struct-to-struct slide-21-canvas
-                          dll-node-3
-                          "next"
-                          dll-node-4
-                          #:to-find lb-find
-                          #:start-angle 5.8
-                          #:start-pull 0.05
-                          #:end-angle 0.5
-                          #:end-pull 0.5)
-  (point-struct-to-struct slide-21-canvas
-                          dll-node-4
-                          "next"
-                          dll-node-5
-                          #:to-find lb-find
-                          #:start-angle 5.8
-                          #:start-pull 0.05
-                          #:end-angle 0.5
-                          #:end-pull 0.5)
-  
-  (point-struct-to-struct slide-21-canvas
-                          dll-node-2
-                          "prev"
-                          dll-node-1
-                          #:from-find lc-find
-                          #:to-find rc-find
-                          #:start-angle 2.7
-                          #:start-pull 0.25
-                          #:end-angle 3.3)
-  (point-struct-to-struct slide-21-canvas
-                          dll-node-3
-                          "prev"
-                          dll-node-2
-                          #:from-find lc-find
-                          #:to-find rc-find
-                          #:start-angle 2.7
-                          #:start-pull 0.25
-                          #:end-angle 3.3)
-  (point-struct-to-struct slide-21-canvas
-                          dll-node-4
-                          "prev"
-                          dll-node-3
-                          #:from-find lc-find
-                          #:to-find rc-find
-                          #:start-angle 2.7
-                          #:start-pull 0.25
-                          #:end-angle 3.3)
-  (point-struct-to-struct slide-21-canvas
-                          dll-node-5
-                          "prev"
-                          dll-node-4
-                          #:from-find lc-find
-                          #:to-find rc-find
-                          #:start-angle 2.7
-                          #:start-pull 0.25
-                          #:end-angle 3.3)
-  (point-struct-to-struct slide-21-canvas
-                          dll-node-6
-                          "prev"
-                          dll-node-5
-                          #:from-find lc-find
-                          #:to-find rc-find
-                          #:start-angle 2.7
-                          #:start-pull 0.25
-                          #:end-angle 3.3)
-  
+  (define dll
+    (vector dll-node-1
+            dll-node-2
+            dll-node-3
+            dll-node-4
+            dll-node-5
+            dll-node-6))
+
+  (point-x-to-y slide-21-canvas
+                (struct-src-getter head-tail-struct "head")
+                (struct-dst-getter dll-node-1)
+                #:to-find ct-find
+                #:start-angle 0
+                #:start-pull 0.3
+                #:end-angle (* 3 (/ pi 2)))
+  (for ([i (in-range 4)])
+    (point-x-to-y slide-21-canvas
+                  (struct-src-getter (vector-ref dll i) "next")
+                  (struct-dst-getter (vector-ref dll (+ i 1)))
+                  #:to-find lb-find
+                  #:start-angle 5.8
+                  #:start-pull 0.05
+                  #:end-angle 0.5
+                  #:end-pull 0.5
+                  )
+    (point-x-to-y slide-21-canvas
+                  (struct-src-getter (vector-ref dll (+ i 1)) "prev")
+                  (struct-dst-getter (vector-ref dll i))
+                  #:from-find lc-find
+                  #:to-find rc-find
+                  #:start-angle 2.7
+                  #:start-pull 0.25
+                  #:end-angle 3.3
+                  )
+    )
+  (point-x-to-y slide-21-canvas
+                  (struct-src-getter dll-node-6 "prev")
+                  (struct-dst-getter dll-node-5)
+                  #:from-find lc-find
+                  #:to-find rc-find
+                  #:start-angle 2.7
+                  #:start-pull 0.25
+                  #:end-angle 3.3
+                  )
   (cond
     [(or (= phase 1))
-     (point-struct-to-struct slide-21-canvas
-                          dll-node-5
-                          "next"
-                          dll-node-6
-                          #:to-find lb-find
-                          #:start-angle 5.8
-                          #:start-pull 0.05
-                          #:end-angle 0.5
-                          #:end-pull 0.5)
-     (point-struct-to-struct slide-21-canvas
-                          head-tail-struct
-                          "tail"
-                          dll-node-6
-                          #:to-find ct-find
-                          #:start-angle 0
-                          #:start-pull 0.3
-                          #:end-angle (* 7 (/ pi 4)))
+     (point-x-to-y slide-21-canvas
+                   (struct-src-getter dll-node-5 "next")
+                   (struct-dst-getter dll-node-6)
+                   #:to-find lb-find
+                   #:start-angle 5.8
+                   #:start-pull 0.05
+                   #:end-angle 0.5
+                   #:end-pull 0.5)
+     (point-x-to-y slide-21-canvas
+                   (struct-src-getter head-tail-struct "tail")
+                   (struct-dst-getter dll-node-6)
+                   #:to-find ct-find
+                   #:start-angle 0
+                   #:start-pull 0.3
+                   #:end-angle (* 7 (/ pi 4)))
      ]
     [(or (= phase 2))
-     (point-struct-to-struct slide-21-canvas
-                          head-tail-struct
-                          "tail"
-                          dll-node-5
-                          #:to-find ct-find
-                          #:start-angle 0
-                          #:start-pull 0.3
-                          #:end-angle (* 7 (/ pi 4)))
+     (point-x-to-y slide-21-canvas
+                   (struct-src-getter head-tail-struct "tail")
+                   (struct-dst-getter dll-node-5)
+                   #:to-find ct-find
+                   #:start-angle 0
+                   #:start-pull 0.3
+                   #:end-angle (* 7 (/ pi 4)))
      ])
-  
-  
-  
-
-
   
   (canvas-final slide-21-canvas)
   )
@@ -584,7 +495,7 @@
     (create-struct (list "data" "len")
                    (list (ptr) len)))
   (insert slide-22-canvas
-          (struct-pict-getter array-struct)
+          array-struct
           0.03
           0.4)
 
@@ -627,49 +538,37 @@
   (cond
     [(< phase 7)
      (insert slide-22-canvas
-             (vec-pict-getter slide-22-small-vector #:show-indices? false)
+             slide-22-small-vector
               0.5
               0.4)
-     (point-struct-to-vec slide-22-canvas
-                          array-struct
-                          "data"
-                          slide-22-small-vector
-                          #:to-find ct-find
-                          #:start-angle 1
-                          #:end-angle 5.5
-                          )])
+     (point-x-to-y slide-22-canvas
+                   (struct-src-getter array-struct "data")
+                   (vec-dst-getter slide-22-small-vector)
+                   #:to-find lt-find
+                   #:start-angle 1
+                   #:end-angle 5.5
+                   )])
   (cond
     [(> phase 4)
      (insert slide-22-canvas
-             (vec-pict-getter slide-22-large-vector #:show-indices? false)
+             slide-22-large-vector
               0.4
               0.7)
      ])
   (cond
     [(> phase 6)
-     (point-struct-to-vec slide-22-canvas
-                          array-struct
-                          "data"
-                          slide-22-large-vector
-                          #:to-find ct-find
-                          #:start-angle 0.5
-                          #:end-angle 5.5)
+     (point-x-to-y slide-22-canvas
+                   (struct-src-getter array-struct "data")
+                   (vec-dst-getter slide-22-large-vector)
+                   #:to-find lt-find
+                   #:start-angle 0.5
+                   #:end-angle 5.5)
      ])
   
   
   
 
-  (canvas-final slide-22-canvas))
+  (println (canvas-final slide-22-canvas)))
 
-
-(slide-22-animator 1)
-(slide-22-animator 2)
-(slide-22-animator 3)
-(slide-22-animator 4)
-(slide-22-animator 5)
-(slide-22-animator 6)
-(slide-22-animator 7)
-(slide-22-animator 8)
-(slide-22-animator 9)
-(slide-22-animator 10)
-(slide-22-animator 11)
+(for ([i (in-range 1 12)])
+    (slide-22-animator i))

@@ -115,10 +115,17 @@
   (set-struct-struct-final! strct final-pic)
   (struct-struct-final strct))
 
-(define (struct-pict-getter strct)
-  (vector strct (struct-struct-final strct)))
+(define (struct-src-getter strct field)
+  (define loc (void))
+  (for ([i (in-range (length (struct-struct-lst-field-names strct)))])
+    (if (equal? (list-ref (struct-struct-lst-field-names strct) i) field)
+        (set! loc (list-ref (struct-struct-lst-pics strct) i))
+        (void))
+    )
+         loc
+  )
 
-(define (struct-loc-getter strct
+(define (struct-dst-getter strct
                            #:field [field #f])
   (cond
         [field
@@ -128,9 +135,9 @@
                (set! loc (list-ref (struct-struct-lst-pics strct) i))
                (void))
            )
-         (vector strct loc)]
+         loc]
         [else
-         (vector strct (struct-struct-box strct))]
+         (struct-struct-box strct)]
         )
   )
 

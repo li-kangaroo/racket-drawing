@@ -143,25 +143,7 @@
   (set-cons-list-nodes! conslist (append (cons-list-nodes conslist) (list new-node)))
   (draw-list conslist)
   )
-
-(define (list-loc-getter lst
-                         #:content? [content? #f]
-                         #:index [index 0])
-  (cond
-        [content?
-         (vector lst (cons-node-data-pic (list-ref (cons-list-nodes lst) index)))]
-        [else
-         (vector lst (cons-node-box (list-ref (cons-list-nodes lst) index)))]
-        )
-  )
-
-
-#|
-(define a (make-list-from-list (list 1 2 3 4)))
-(draw-list a)
-(println "asdf")
-(add-single-node-end 1 a)
-a
-(add-single-node-end "abc" a)
-a
-|#
+(define (list-src-getter lst index)
+  (cons-node-data-pic (list-ref (cons-list-nodes lst) index)))
+(define (list-dst-getter lst index)
+  (cons-node-box (list-ref (cons-list-nodes lst) index)))

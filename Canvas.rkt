@@ -27,10 +27,14 @@
   (define base (rectangle width height))
   (canvas (list) base))
 
-(define (insert canvas call-pict-getter-on-target x y
+(define (insert canvas target x y
                 #:finder [finder 'lt])
-  (define target (vector-ref call-pict-getter-on-target 0))
-  (define target-pict (vector-ref call-pict-getter-on-target 1))
+  (define target-pict
+    (cond
+      [(vect? target) (vect-final target)]
+      [(struct-struct? target) (struct-struct-final target)]
+      ))
+  ;future custom structs will need to add to this cond case - pull the pict out of the struct
   (set-canvas-reprs! canvas (append (canvas-reprs canvas) (list target)))
   (set-canvas-final! canvas
                      (ppict-do (canvas-final canvas)
@@ -74,8 +78,8 @@
   )
 
 (define (point-x-to-y canvas
-                      call-loc-getter-on-x
-                      call-loc-getter-on-y
+                      call-src-getter-on-x
+                      call-dst-getter-on-y
                       #:from-find [from-find rc-find]
                       #:to-find [to-find lc-find]
                       #:color [clr "Medium Violet Red"]
@@ -83,10 +87,8 @@
                       #:end-angle [ea #f]
                       #:start-pull [sp 1/4]
                       #:end-pull [ep 1/4])
-  (define x (vector-ref call-loc-getter-on-x 0))
-  (define x-loc (vector-ref call-loc-getter-on-x 1))
-  (define y (vector-ref call-loc-getter-on-y 0))
-  (define y-loc (vector-ref call-loc-getter-on-y 1))
+  (define x-loc call-src-getter-on-x)
+  (define y-loc call-dst-getter-on-y)
   
   (set-canvas-final! canvas
                      (pin-arrow-line 10 (canvas-final canvas)
@@ -99,81 +101,6 @@
                                      #:end-pull ep
                                      #:color clr)
                      ))
-
-
-(define (point-vec-to-vec canvas from from-index to
-                          #:from-find [from-find rc-find]
-                          #:to-find [to-find lc-find]
-                          #:color [clr "Medium Violet Red"]
-                          #:start-angle [sa #f]
-                          #:end-angle [ea #f]
-                          #:start-pull [sp 1/4]
-                          #:end-pull [ep 1/4])
-  (define real-from (vector-ref (vect-pic-contents from) from-index))
-
-  (set-canvas-final! canvas
-                     (pin-arrow-line 10 (canvas-final canvas)
-                                     real-from from-find
-                                     (vect-final-no-indices to) to-find
-                                     #:line-width 2
-                                     #:start-angle sa
-                                     #:end-angle ea
-                                     #:color clr
-                                     #:start-pull sp
-                                     #:end-pull ep)
-                     ))
-
-(define (point-vec-to-struct canvas from from-index to
-                             #:from-find [from-find rc-find]
-                             #:to-find [to-find lc-find]
-                             #:color [clr "Medium Violet Red"]
-                             #:start-angle [sa #f]
-                             #:end-angle [ea #f]
-                             #:start-pull [sp 1/4]
-                             #:end-pull [ep 1/4])
-  (define real-from (vector-ref (vect-pic-contents from) from-index))
-  (set-canvas-final! canvas
-                     (pin-arrow-line 10 (canvas-final canvas)
-                                     real-from from-find
-                                     (struct-struct-box to) to-find
-                                     #:line-width 2
-                                     #:start-angle sa
-                                     #:end-angle ea
-                                     #:start-pull sp
-                                     #:end-pull ep
-                                     #:color clr)
-                     ))
-
-(define (point-struct-to-vec canvas from from-field to
-                             #:from-find [from-find rc-find]
-                             #:to-find [to-find lc-find]
-                             #:color [clr "Medium Violet Red"]
-                             #:start-angle [sa #f]
-                             #:end-angle [ea #f]
-                             #:start-pull [sp 1/4]
-                             #:end-pull [ep 1/4])
-  (define real-from (void))
-  (for ([i (in-range (length (struct-struct-lst-field-names from)))])
-    (if (equal? (list-ref (struct-struct-lst-field-names from) i) from-field)
-        (set! real-from (list-ref (struct-struct-lst-pics from) i))
-        (void))
-    )
-  
-
-  
-
-  (set-canvas-final! canvas
-                     (pin-arrow-line 10 (canvas-final canvas)
-                                     real-from from-find
-                                     (vect-final-no-indices to) to-find
-                                     #:line-width 2
-                                     #:start-angle sa
-                                     #:end-angle ea
-                                     #:start-pull sp
-                                     #:end-pull ep
-                                     #:color clr)
-                     ))
-
 
 
 (define (link-node-to-node canvas from from-index to to-index
@@ -198,117 +125,3 @@
                                      #:end-pull ep
                                      #:color clr)
                      ))
-
-
-(define (point-struct-to-node canvas from from-field to to-index
-                           #:from-find [from-find rc-find]
-                           #:to-find [to-find lc-find]
-                           #:color [clr "Medium Violet Red"]
-                           #:start-angle [sa #f]
-                           #:end-angle [ea #f]
-                           #:start-pull [sp 1/4]
-                           #:end-pull [ep 1/4])
-  (define real-from (void))
-  (for ([i (in-range (length (struct-struct-lst-field-names from)))])
-    (if (equal? (list-ref (struct-struct-lst-field-names from) i) from-field)
-        (set! real-from (list-ref (struct-struct-lst-pics from) i))
-        (void))
-    )
-  (define real-to (cons-node-box (list-ref (cons-list-nodes to) to-index)))
-  (set-canvas-final! canvas
-                     (pin-arrow-line 10 (canvas-final canvas)
-                                     real-from from-find
-                                     real-to to-find
-                                     #:line-width 2
-                                     #:start-angle sa
-                                     #:end-angle ea
-                                     #:start-pull sp
-                                     #:end-pull ep
-                                     #:color clr)
-                     ))
-
-(define (point-struct-to-struct canvas from from-field to 
-                           #:from-find [from-find rc-find]
-                           #:to-find [to-find lc-find]
-                           #:color [clr "Medium Violet Red"]
-                           #:start-angle [sa #f]
-                           #:end-angle [ea #f]
-                           #:start-pull [sp 1/4]
-                           #:end-pull [ep 1/4])
-  (define real-from (void))
-  (for ([i (in-range (length (struct-struct-lst-field-names from)))])
-    (if (equal? (list-ref (struct-struct-lst-field-names from) i) from-field)
-        (set! real-from (list-ref (struct-struct-lst-pics from) i))
-        (void))
-    )
-  
-  (set-canvas-final! canvas
-                     (pin-arrow-line 10 (canvas-final canvas)
-                                     real-from from-find
-                                     (struct-struct-box to) to-find
-                                     #:line-width 2
-                                     #:start-angle sa
-                                     #:end-angle ea
-                                     #:start-pull sp
-                                     #:end-pull ep
-                                     #:color clr)
-                     ))
-
-
-
-#|
-(define (insert-vec canvas vect x y
-                    #:show-indices? [show-indices? #t])
-  (set-canvas-reprs! canvas (append (canvas-reprs canvas) (list vect)))
-  (redraw-vec vect)
-  (if show-indices?
-      (set-canvas-final! canvas
-                         (ppict-do (canvas-final canvas)
-                                   #:go  (coord x y 'lt)
-                                   (vect-final vect)))
-      (set-canvas-final! canvas
-                         (ppict-do (canvas-final canvas)
-                                   #:go  (coord x y 'lt)
-                                   (vect-final-no-indices vect)))
-      ))
-
-(define (insert-struct canvas strct x y)
-  (set-canvas-reprs! canvas (append (canvas-reprs canvas) (list strct)))
-  
-  (set-canvas-final! canvas
-                     (ppict-do (canvas-final canvas)
-                               #:go  (coord x y 'lt)
-                               (struct-struct-final strct)))
-  )
-
-
-|#
-
-#|
-(println "begins here")
-(define test-canvas (blank-canvas 350 250))
-(insert-list test-canvas a (list 0.1 0.3 0.5) (list 0.1 0.3 0.1) true)
-;test-canvas
-
-
-
-(define a (make-vec 10 0))
-(define vecnull (make-vec 10))
-(set-vec-cell a 2 (ptr))
-(set-vec-cell a 6 (ptr))
-(set-vec-cell a 7 (ptr))
-
-
-(define test-canvas (blank-canvas 350 250))
-(insert-vec test-canvas vecnull 0.02 0.5 true)
-(insert-vec test-canvas a 0.02 0.02 true)
-
-test-canvas
-(point-vec test-canvas a 2 vecnull)
-
-(point-vec test-canvas a 6 vecnull ct-find)
-
-(point-vec test-canvas a 7 a)
-
-test-canvas
-|#
