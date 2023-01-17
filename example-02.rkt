@@ -38,42 +38,68 @@
                #:link-nodes? false)
   (cond
     [(< phase 5)
-     (link-node-to-node slide-8-canvas slide-8-lst-1 0 slide-8-lst-1 1
-                        #:from-find rc-find)
-     (link-node-to-node slide-8-canvas slide-8-lst-1 2 slide-8-lst-1 3
-                        #:from-find rc-find)]
+     (point-x-to-y slide-8-canvas
+                   (list-src-getter slide-8-lst-1 0 #:point-from-data? #f)
+                   (list-dst-getter slide-8-lst-1 1)
+                   #:from-find rc-find)
+     
+     (point-x-to-y slide-8-canvas
+                   (list-src-getter slide-8-lst-1 2 #:point-from-data? #f)
+                   (list-dst-getter slide-8-lst-1 3)
+                   #:from-find rc-find)]
     [else
-     (link-node-to-node slide-8-canvas slide-8-lst-1 0 slide-8-lst-1 1                    
-                        #:color "Gray")
-     (link-node-to-node slide-8-canvas slide-8-lst-1 2 slide-8-lst-1 3
-                        #:color "Gray")])
+     (point-x-to-y slide-8-canvas
+                   (list-src-getter slide-8-lst-1 0 #:point-from-data? #f)
+                   (list-dst-getter slide-8-lst-1 1)
+                   #:color "Gray")
+     (point-x-to-y slide-8-canvas
+                   (list-src-getter slide-8-lst-1 2 #:point-from-data? #f)
+                   (list-dst-getter slide-8-lst-1 3)
+                   #:color "Gray")])
   
   (cond
     [(= phase 1)
-     (link-node-to-node slide-8-canvas slide-8-lst-1 1 slide-8-lst-1 2)]
+     (point-x-to-y slide-8-canvas
+                   (list-src-getter slide-8-lst-1 1 #:point-from-data? #f)
+                   (list-dst-getter slide-8-lst-1 2))]
     [(= phase 2)
-     (link-node-to-node slide-8-canvas slide-8-lst-1 1 slide-8-lst-1 2)
-     (link-node-to-node slide-8-canvas slide-8-lst-2 0 slide-8-lst-1 2
-                        #:to-find cb-find)]
+     (point-x-to-y slide-8-canvas
+                   (list-src-getter slide-8-lst-1 1 #:point-from-data? #f)
+                   (list-dst-getter slide-8-lst-1 2))
+     (point-x-to-y slide-8-canvas
+                   (list-src-getter slide-8-lst-2 0 #:point-from-data? #f)
+                   (list-dst-getter slide-8-lst-1 2)
+                   #:to-find cb-find)]
     [(= phase 3)
-     (link-node-to-node slide-8-canvas slide-8-lst-1 1 slide-8-lst-1 2
-                        #:color "Gray")
-     (link-node-to-node slide-8-canvas slide-8-lst-1 1 slide-8-lst-2 0
-                        #:from-find cb-find
-                        #:to-find lt-find)
-     (link-node-to-node slide-8-canvas slide-8-lst-2 0 slide-8-lst-1 2
-                        #:to-find cb-find)]
+     (point-x-to-y slide-8-canvas
+                   (list-src-getter slide-8-lst-1 1 #:point-from-data? #f)
+                   (list-dst-getter slide-8-lst-1 2)
+                   #:color "Gray")
+     (point-x-to-y slide-8-canvas
+                   (list-src-getter slide-8-lst-1 1 #:point-from-data? #f)
+                   (list-dst-getter slide-8-lst-2 0)
+                   #:from-find cb-find
+                   #:to-find lt-find)
+     (point-x-to-y slide-8-canvas
+                   (list-src-getter slide-8-lst-2 0 #:point-from-data? #f)
+                   (list-dst-getter slide-8-lst-1 2)
+                   #:to-find cb-find)
+     ]
     [(= phase 4)
      (insert-list slide-8-canvas
                slide-8-lst-3
                (list 0.2 0.6)
                (list 0.2 0.2)
                #:link-nodes? false)
-     (link-node-to-node slide-8-canvas slide-8-lst-1 1 slide-8-lst-2 0
-                        #:from-find cb-find
-                        #:to-find lt-find)
-     (link-node-to-node slide-8-canvas slide-8-lst-2 0 slide-8-lst-1 2
-                        #:to-find cb-find)
+     (point-x-to-y slide-8-canvas
+                   (list-src-getter slide-8-lst-1 1 #:point-from-data? #f)
+                   (list-dst-getter slide-8-lst-2 0)
+                   #:from-find cb-find
+                   #:to-find lt-find)
+     (point-x-to-y slide-8-canvas
+                   (list-src-getter slide-8-lst-2 0 #:point-from-data? #f)
+                   (list-dst-getter slide-8-lst-1 2)
+                   #:to-find cb-find)
      ]
     [(= phase 5)
      (insert-list slide-8-canvas
@@ -81,33 +107,42 @@
                (list 0.2 0.6)
                (list 0.2 0.2)
                #:link-nodes? false)
-     (link-node-to-node slide-8-canvas slide-8-lst-1 0 slide-8-lst-3 1
-                        #:from-find ct-find
-                        #:to-find ct-find
-                        #:start-angle 90
-                        #:start-pull 1.1
-                        #:end-angle 200
-                        )
-     (link-node-to-node slide-8-canvas slide-8-lst-3 1 slide-8-lst-1 1
-                        #:from-find cb-find
-                        #:to-find rt-find)
-     (link-node-to-node slide-8-canvas slide-8-lst-1 1 slide-8-lst-2 0
-                        #:from-find cb-find
-                        #:to-find lt-find)
-     (link-node-to-node slide-8-canvas slide-8-lst-2 0 slide-8-lst-1 2
-                        #:to-find cb-find)
-     (link-node-to-node slide-8-canvas slide-8-lst-1 2 slide-8-lst-3 0 
-                        #:from-find lc-find
-                        #:to-find rb-find)
-     (link-node-to-node slide-8-canvas slide-8-lst-3 0 slide-8-lst-1 3 
-                        #:from-find cb-find
-                        #:to-find cb-find
-                        #:start-angle (/ (* 3 pi) 2)
-                        #:start-pull 2.4
-                        #:end-angle (/ pi 2))
+     (point-x-to-y slide-8-canvas
+                   (list-src-getter slide-8-lst-1 0 #:point-from-data? #f)
+                   (list-dst-getter slide-8-lst-3 1)
+                   #:from-find ct-find
+                   #:to-find ct-find
+                   #:start-angle 90
+                   #:start-pull 1.1
+                   #:end-angle 200)
+     (point-x-to-y slide-8-canvas
+                   (list-src-getter slide-8-lst-3 1 #:point-from-data? #f)
+                   (list-dst-getter slide-8-lst-1 1)
+                   #:from-find cb-find
+                   #:to-find rt-find)
+     (point-x-to-y slide-8-canvas
+                   (list-src-getter slide-8-lst-1 1 #:point-from-data? #f)
+                   (list-dst-getter slide-8-lst-2 0)
+                   #:from-find cb-find
+                   #:to-find lt-find)
+     (point-x-to-y slide-8-canvas
+                   (list-src-getter slide-8-lst-2 0 #:point-from-data? #f)
+                   (list-dst-getter slide-8-lst-1 2)
+                   #:to-find cb-find)
+     (point-x-to-y slide-8-canvas
+                   (list-src-getter slide-8-lst-1 2 #:point-from-data? #f)
+                   (list-dst-getter slide-8-lst-3 0)
+                   #:from-find lc-find
+                   #:to-find rb-find)
+     (point-x-to-y slide-8-canvas
+                   (list-src-getter slide-8-lst-3 0 #:point-from-data? #f)
+                   (list-dst-getter slide-8-lst-1 3)
+                   #:from-find cb-find
+                   #:to-find cb-find
+                   #:start-angle (/ (* 3 pi) 2)
+                   #:start-pull 2.4
+                   #:end-angle (/ pi 2))
      ]
-     ;(link-node-to-node slide-8-canvas slide-8-lst-1 1 slide-8-lst-1 2 lc-find)]
-    
     )
   
   (canvas-final slide-8-canvas)

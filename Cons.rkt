@@ -143,7 +143,10 @@
   (set-cons-list-nodes! conslist (append (cons-list-nodes conslist) (list new-node)))
   (draw-list conslist)
   )
-(define (list-src-getter lst index)
-  (cons-node-data-pic (list-ref (cons-list-nodes lst) index)))
+(define (list-src-getter lst index #:point-from-data? [from-data #t])
+  (if from-data
+      (cons-node-data-pic (list-ref (cons-list-nodes lst) index))
+      (cons-node-next-pic (list-ref (cons-list-nodes lst) index))))
+
 (define (list-dst-getter lst index)
   (cons-node-box (list-ref (cons-list-nodes lst) index)))
