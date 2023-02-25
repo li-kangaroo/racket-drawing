@@ -33,8 +33,9 @@
      (error "need equal number of fields and contents")]
     )
   (define num-fields (length lst-fields))
-  (define box-pic (rectangle 25
+  (define box-pic (filled-rectangle 25
                              (* 25 num-fields)
+                             #:color "White" 
                              #:border-color "Blue"
                              #:border-width 2))
   (for ([i (in-range (- num-fields 1))])

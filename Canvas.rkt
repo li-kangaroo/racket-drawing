@@ -23,8 +23,16 @@
                      'final
                      (canvas-final obj)))))])
 
-(define (blank-canvas width height)
-  (define base (rectangle width height))
+(define (blank-canvas width height
+                      #:draw-border? [draw-border? #t]
+                      #:background-color [bg-color "White"]
+                      #:border-color [border-color #f]
+                      #:border-width [border-width #f])
+  (define base (filled-rectangle width height
+                                 #:draw-border? draw-border?
+                                 #:color bg-color
+                                 #:border-color border-color
+                                 #:border-width border-width))
   (canvas (list) base))
 
 (define (insert canvas target x y
@@ -100,7 +108,14 @@
                                      #:start-pull sp
                                      #:end-pull ep
                                      #:color clr)
-                     ))
+                     )
+  (set-canvas-final! canvas
+                     (ppict-do (canvas-final canvas)
+                               #:go (at-find-pict x-loc cc-find 'cc)
+                               x-loc
+                               )
+                     )
+  )
 
 
 (define (link-node-to-node canvas from from-index to to-index

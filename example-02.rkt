@@ -607,3 +607,38 @@
 
 (for ([i (in-range 1 12)])
     (slide-22-animator i))
+
+
+(define make-slide-2 (lambda (x)
+                       (define slide2 (blank-canvas 300 200
+                                                    #:draw-border? #f))
+
+                       (define box2 (create-struct (list "value") (list x)))
+                       (define a2 (create-struct (list "A") (list (ptr))))
+                       (define b2 (create-struct (list "B") (list (ptr))))
+                       (define c2 (create-struct (list "C") (list (ptr))))
+
+                       (insert slide2 box2 0.35 0.7)
+                       (insert slide2 a2 0.1 0.2)
+                       (insert slide2 b2 0.4 0.2)
+                       (insert slide2 c2 0.7 0.2)
+
+                       (point-x-to-y slide2
+                                     (struct-src-getter a2 "A")
+                                     (struct-dst-getter box2)
+                                     #:to-find lt-find
+                                     #:from-find cc-find)
+                       (point-x-to-y slide2
+                                     (struct-src-getter b2 "B")
+                                     (struct-dst-getter box2)
+                                     #:to-find ct-find
+                                     #:from-find cb-find)
+                       (point-x-to-y slide2
+                                     (struct-src-getter c2 "C")
+                                     (struct-dst-getter box2)
+                                     #:to-find rt-find
+                                     #:from-find cc-find)
+
+                       (scale (canvas-final slide2) 2 2)))
+
+(make-slide-2 6)

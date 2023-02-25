@@ -8,7 +8,8 @@
 (provide (all-defined-out))
 
 
-(define (a-rect) (rectangle 20 30 #:border-width 2))
+(define (a-rect) (filled-rectangle 20 30 #:border-width 2
+                                   #:color "White"))
 
 
 (struct vect
