@@ -168,9 +168,8 @@
   (define slide-9-lst-1 (make-list-from-list (list 2 3 4 5 6 7 8)))
   (define slide-9-lst-2 (make-list-from-list (list 1 2 3 4 5 6 7 8)))
 
-  (define lst-struct
-    (create-struct (list "lst")
-                   (list (ptr))))
+  (define lst-var
+    (create-variable "lst" (ptr)))
   (define head-struct
     (create-struct (list "head")
                    (list (ptr))))
@@ -189,7 +188,7 @@
   (cond
     [(> phase 2)
      (insert slide-9-canvas
-             lst-struct
+             lst-var
              0.03 0.1)])
   (cond
     [(> phase 5)
@@ -197,7 +196,7 @@
              head-struct
              0.005 0.45)
      (point-x-to-y slide-9-canvas
-                   (struct-src-getter lst-struct "lst")
+                   (struct-src-getter lst-var "lst")
                    (struct-dst-getter head-struct)
                    #:from-find cb-find
                              #:to-find ct-find)])
@@ -208,7 +207,7 @@
     [(= phase 2)]
     [(= phase 3)
      (point-x-to-y slide-9-canvas
-                   (struct-src-getter lst-struct "lst")
+                   (struct-src-getter lst-var "lst")
                    (list-dst-getter slide-9-lst-1 0)
                    #:to-find ct-find
                    #:start-angle 0
@@ -217,7 +216,7 @@
      ]
     [(= phase 4)
      (point-x-to-y slide-9-canvas
-                   (struct-src-getter lst-struct "lst")
+                   (struct-src-getter lst-var "lst")
                    (list-dst-getter slide-9-lst-2 1)
                    #:to-find ct-find
                    #:start-angle 0
@@ -226,7 +225,7 @@
      ]
     [(= phase 5)
      (point-x-to-y slide-9-canvas
-                   (struct-src-getter lst-struct "lst")
+                   (struct-src-getter lst-var "lst")
                    (list-dst-getter slide-9-lst-2 1)
                    #:to-find ct-find
                    #:start-angle 0
@@ -234,7 +233,7 @@
                    #:start-pull 0.5
                    #:color "Gray")
      (point-x-to-y slide-9-canvas
-                   (struct-src-getter lst-struct "lst")
+                   (struct-src-getter lst-var "lst")
                    (list-dst-getter slide-9-lst-2 0)
                    #:to-find ct-find
                    #:start-angle 0
@@ -380,7 +379,6 @@
 
 (slide-18-animator 1)
 (slide-18-animator 2)
-
 
 
 ;Slide 21: DLL

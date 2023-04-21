@@ -27,16 +27,18 @@
                      (struct-struct-final obj)))))])
 
 (define (create-struct lst-fields lst-contents
-                       #:fixed-width [fixed-width null])
+                       #:fixed-width [fixed-width null]
+                       #:box-border-color [box-border-color "Blue"])
   (cond
     [(not (= (length lst-fields) (length lst-contents)))
      (error "need equal number of fields and contents")]
     )
   (define num-fields (length lst-fields))
+  (println box-border-color)
   (define box-pic (filled-rectangle 25
                              (* 25 num-fields)
                              #:color "White" 
-                             #:border-color "Blue"
+                             #:border-color box-border-color
                              #:border-width 2))
   (for ([i (in-range (- num-fields 1))])
     (set! box-pic (ppict-do box-pic
@@ -50,11 +52,18 @@
                    (list)
                    box-pic
                    (blank 0)))
-  (draw-struct result #:fixed-width fixed-width)
+  (draw-struct result #:fixed-width fixed-width
+               #:box-border-color box-border-color)
   result)
 
+
+(define (create-variable var-name var-value)
+  (create-struct (list var-name) (list var-value) #:box-border-color "Orange")
+  )
+
 (define (draw-struct strct
-                     #:fixed-width [fixed-width null])
+                     #:fixed-width [fixed-width null]
+                     #:box-border-color [box-border-color "Blue"])
   (define num-fields (length (struct-struct-lst-contents strct)))
   (set-struct-struct-lst-pics! strct
    (build-list num-fields
@@ -92,7 +101,7 @@
       (set! box-width fixed-width))
   (define filled-box (rectangle (+ 10 box-width)
                              (* 25 num-fields)
-                             #:border-color "Blue"
+                             #:border-color box-border-color
                              #:border-width 2))
   (for ([i (in-range (- num-fields 1))])
     (set! filled-box (ppict-do filled-box
